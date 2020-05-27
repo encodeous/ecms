@@ -1,0 +1,12 @@
+﻿@inherits LayoutComponentBase
+<AuthorizeView>
+    <Authorized>
+        <ManagementMenu />
+        <div class="content px-4">
+            @Body
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <Error ErrorMessage="You are not authorized to see this page."/>
+    </NotAuthorized>
+</AuthorizeView>

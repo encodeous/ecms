@@ -1,0 +1,8 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+    </Found>
+    <NotFound>
+        <Error IconText = "🏝️" FriendlyMessage="Lost Explorer - 404" ErrorMessage="Theres nothing but emptiness..."/>
+    </NotFound>
+</Router>

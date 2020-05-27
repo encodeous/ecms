@@ -1,0 +1,99 @@
+﻿@using ECMS.Security
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavManager
+<style>
+    .login-card{
+        min-width: 30rem;
+        max-width: 100rem;
+    }
+
+    .login-card-content {
+        padding: 1rem;
+    }
+
+    .login-card-clean-margin {
+        margin: 0px;
+    }
+</style>
+<div class="d-flex justify-content-center">
+    @if (CheckInput)
+    {
+        CheckInput = false;
+        <DialogBox Title="Please double check your input.">Please enter a username and Password</DialogBox>
+    }
+    else if (CheckLogin)
+    {
+        CheckLogin = false;
+        <DialogBox Title="Please double check your input.">The username or password is incorrect!</DialogBox>
+    }
+    else if (CheckRegister)
+    {
+        CheckRegister = false;
+        <DialogBox Title="Please double check your input.">Username already exists!</DialogBox>
+    }
+    else if (RegisterSuccess)
+    {
+        CheckRegister = false;
+        <DialogBox Title="You have successfully registered!">You may now login!</DialogBox>
+    }
+    <MatCard class="login-card">
+        <MatCardContent>
+            <MatBody2 class="login-card-content login-card-clean-margin">
+                <MatTabGroup>
+                    <MatTab Label="Login">
+                        <MatTextField @bind-Value="Username" Label="Username" Required="true" FullWidth="true"></MatTextField>
+                        <MatTextField @bind-Value="Password" Label="Password" Required="true" FullWidth="true" Type="password"></MatTextField>
+                        <MatButton OnClick="OnLogin">Login</MatButton>
+                    </MatTab>
+
+                    <MatTab Label="Register">
+                        <MatTextField @bind-Value="Username" Label="Pick a Username" Required="true" FullWidth="true"></MatTextField>
+                        <MatTextField @bind-Value="Password" Label="Create a Password" Required="true" FullWidth="true" Type="password"></MatTextField>
+                        <MatButton OnClick="OnRegister">Register</MatButton>
+                    </MatTab>
+                </MatTabGroup>
+            </MatBody2>
+        </MatCardContent>
+    </MatCard>
+</div>
+
+@code {
+    protected string Username { get; set; }
+    protected string Password { get; set; }
+    protected bool CheckInput;
+    protected bool CheckRegister;
+    protected bool CheckLogin;
+    protected bool RegisterSuccess;
+
+    protected void OnRegister()
+    {
+        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+        {
+            CheckInput = true;
+            return;
+        }
+        var prov = (EcmsAuthenticationStateProvider) AuthenticationStateProvider;
+        if (!prov.RegisterUser(Username, Password))
+        {
+            CheckRegister = true;
+        }
+        else
+        {
+            RegisterSuccess = true;
+        }
+    }
+
+    protected async void OnLogin()
+    {
+        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+        {
+            CheckInput = true;
+            return;
+        }
+        var prov = (EcmsAuthenticationStateProvider)AuthenticationStateProvider;
+        if (!await prov.AuthenticateUser(Username, Password, NavManager, ""))
+        {
+            CheckLogin = true;
+        }
+    }
+}

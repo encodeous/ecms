@@ -1,0 +1,36 @@
+﻿<style>
+    .nav-text {
+        margin-left: auto;
+        margin-right: 1rem;
+        display: inline-block;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <NavLink class="navbar-brand" href="">
+        <img src="@StaticConfig.CMSIconUrl" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        @StaticConfig.CMSDisplayName
+    </NavLink>
+    <Navigator Icon="home" Class="nav-item nav-link" Url="">
+        Home
+    </Navigator>
+    <Navigator Class="nav-item nav-link active" Url="fetchdata">
+        TEst
+    </Navigator>
+    <Navigator Class="nav-item nav-link active" Url="counter">
+        Test
+    </Navigator>
+
+    <AuthorizeView>
+        <NotAuthorized>
+            <Navigator Icon="person" Class="nav-text" Url="login">
+                Login / Register
+            </Navigator>
+        </NotAuthorized>
+        <Authorized>
+            <div class="nav-text">
+                <UserWidget/>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</nav>

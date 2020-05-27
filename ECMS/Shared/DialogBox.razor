@@ -1,0 +1,28 @@
+﻿
+<MatDialog IsOpen="@_dialogActive">
+    <MatDialogTitle>@Title</MatDialogTitle>
+    <MatDialogContent>
+        <p>@ChildContent</p>
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@Click">@CloseButtonText</MatButton>
+    </MatDialogActions>
+</MatDialog>
+
+@code {
+    private bool _dialogActive = true;
+
+    private void Click()
+    {
+        _dialogActive = false;
+    }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string CloseButtonText { get; set; } = "OK";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

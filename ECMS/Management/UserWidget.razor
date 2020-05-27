@@ -1,0 +1,31 @@
+﻿
+<AuthorizeView>
+    <Authorized>
+        <MatButton Label="@(StaticConfig.UserWidgetMessage + context.User.Identity.Name)" OnClick="@OnClick" RefBack="@buttonForwardRef"></MatButton>
+        <MatMenu @ref="Menu"  TargetForwardRef="@buttonForwardRef">
+            <MatList>
+                <MatListItem>               
+                    <Navigator Icon="settings" Class="nav-link" Style="display: inline-block" url="manage/general">
+                        Management
+                    </Navigator>
+                </MatListItem>
+                <MatListItem>
+                    <Navigator Icon="arrow_right_alt" Class="nav-link" Style="display: inline-block" url="signout">
+                        Logout
+                    </Navigator>
+                </MatListItem>
+            </MatList>
+        </MatMenu>
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    ForwardRef buttonForwardRef = new ForwardRef();
+    BaseMatMenu Menu;
+    public void OnClick(MouseEventArgs e)
+    {
+        this.Menu.OpenAsync();
+    }
+ 
+}

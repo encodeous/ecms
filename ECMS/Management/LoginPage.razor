@@ -1,0 +1,10 @@
+﻿@page "/login"
+
+<AuthorizeView>
+    <NotAuthorized>
+        <LoginComponent/>
+    </NotAuthorized>
+    <Authorized>
+        <Error ErrorMessage="You are already authenticated!" />
+    </Authorized>
+</AuthorizeView>

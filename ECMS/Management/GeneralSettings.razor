@@ -1,0 +1,82 @@
+﻿@page "/manage/general"
+@layout ManagementLayout
+@inject Authenticator Authenticator
+@inject AuthenticationStateProvider Asp
+@inject NavigationManager NavManager
+
+<AuthorizeView>
+    <Authorized>
+        <MatH3 Style="padding-bottom: 50px">
+            General Settings
+        </MatH3>
+        
+        <div>
+            <MatH5>Change Password</MatH5>
+            <MatDivider />
+            <MatH5>@_passwordChangeResult</MatH5>
+
+            <MatTextField @bind-Value="_newPassword" Label="Password" Style="display: inline-block" FullWidth="true" Type="password"></MatTextField>
+
+            <MatButton Style="display: inline-block" OnClick="() => ChangePassword(context.User.Identity.Name)">Change</MatButton>
+        </div>
+
+        <div>
+            <MatH5>Terminate Your Account</MatH5>
+            <MatDivider />
+
+            <MatButton Style="display: inline-block" OnClick="() => DeleteAccount(context.User.Identity.Name)">Start Process</MatButton>
+            <MatDialog IsOpen="_deleteShow">
+                <MatDialogTitle>Are you sure you want to terminate your account?</MatDialogTitle>
+                <MatDialogContent>
+                    <p>
+                        Do you want to proceed?
+                        Your access to your account, alias and personal information will be permanently lost.
+                        
+                        Your current username will be made available to anyone that registers.
+                    </p>
+                </MatDialogContent>
+                <MatDialogActions>
+                    <MatButton OnClick="() => { _deleteShow = false; }">Cancel</MatButton>
+                    <MatButton OnClick="ConfirmDelete">Yes, Proceed</MatButton>
+                </MatDialogActions>
+            </MatDialog>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    // Password Changing
+    string _newPassword = "";
+
+    string _passwordChangeResult = "";
+
+    public void ChangePassword(string username)
+    {
+        if (string.IsNullOrEmpty(_newPassword))
+        {
+            _passwordChangeResult = "Please enter a password!";
+            return;
+        }
+        Authenticator.SetUser(username, _newPassword);
+        _newPassword = "";
+        _passwordChangeResult = "Password Changed Successfully!";
+        var prov = (EcmsAuthenticationStateProvider) Asp;
+        Task.Run(()=>prov.SignOut());
+        NavManager.NavigateTo("/");
+    }
+
+    // Account Removal
+
+    bool _deleteShow = false;
+
+    public void DeleteAccount(string username)
+    {
+        _deleteShow = true;
+    }
+
+    public void ConfirmDelete()
+    {
+        NavManager.NavigateTo("manage/account/terminate");
+    }
+}

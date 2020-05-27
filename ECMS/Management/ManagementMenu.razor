@@ -1,0 +1,35 @@
+﻿@using ECMS.Data
+@inject NavigationManager NavManager
+
+    <style>
+        .nav-text {
+            margin-left: auto;
+            margin-right: 1rem;
+            display: inline-block;
+        }
+    </style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <NavLink class="navbar-brand" href="" Match="NavLinkMatch.All">
+        <img src="@StaticConfig.CMSIconUrl" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        @StaticConfig.CMSDisplayName Management Interface
+    </NavLink>
+    
+    <Navigator Icon="settings" Class="nav-item nav-link active" Url="manage/general">
+        General Settings
+    </Navigator>
+
+    <div class="nav-text">
+        <Navigator Icon="home" Class="nav-text" Style="display: inline-block" Url="">
+            Return Home
+        </Navigator>
+        <div style="display: inline-block">
+            <UserWidget />
+        </div>
+    </div>
+
+</nav>
+
+@code{
+
+}

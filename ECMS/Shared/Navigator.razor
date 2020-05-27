@@ -1,0 +1,69 @@
+﻿@inject NavigationManager NavManager
+
+<MatThemeProvider Theme="@ActiveTheme">
+    <MatButton Dense="true" Class="@Class" Style="@Style" Icon="@Icon" OnClick="Callback">@ChildContent</MatButton>
+</MatThemeProvider>
+
+@code {
+    MatTheme ActiveTheme;
+
+    MatTheme theme = new MatTheme()
+    {
+        Primary = MatThemeColors.BlueGrey._500.Value,
+        Secondary = MatThemeColors.LightBlue._100.Value
+    };
+    MatTheme theme2 = new MatTheme()
+    {
+        Primary = MatThemeColors.Grey._900.Value,
+        Secondary = MatThemeColors.LightBlue._500.Value
+    };
+
+
+
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += NavManagerOnLocationChanged;
+        if (NavManager.ToBaseRelativePath(NavManager.Uri) == Url)
+        {
+            ActiveTheme = theme;
+        }
+        else
+        {
+            ActiveTheme = theme2;
+        }
+    }
+
+    private void NavManagerOnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (NavManager.ToBaseRelativePath(e.Location) == Url)
+        {
+            ActiveTheme = theme;
+        }
+        else
+        {
+            ActiveTheme = theme2;
+        }
+        this.StateHasChanged();
+    }
+
+    [Parameter]
+    public string Url { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    private void Callback()
+    {
+        NavManager.NavigateTo(Url);
+
+    }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

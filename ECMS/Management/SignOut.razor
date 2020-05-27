@@ -1,0 +1,34 @@
+﻿@page "/signout"
+@using ECMS.Security
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavManager
+
+    <AuthorizeView>
+        <NotAuthorized>
+            @if (_signedOut)
+            {
+                <MatH1>You have now signed out..</MatH1>
+            }
+            else
+            {
+                <MatH1>You are already signed out.</MatH1>
+            }
+        </NotAuthorized>
+        <Authorized>
+            <MatH1>Signing Out...</MatH1>
+            @{
+                _signedOut = true;
+                Task.Run(SignUserOut);
+            }
+        </Authorized>
+    </AuthorizeView>
+
+@code {
+    bool _signedOut = false;
+    public async Task SignUserOut()
+    {
+        var provider = (EcmsAuthenticationStateProvider) AuthenticationStateProvider;
+        await provider.SignOut();
+        NavManager.NavigateTo("");
+    }
+}

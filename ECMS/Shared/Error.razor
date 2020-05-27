@@ -1,0 +1,67 @@
+﻿@layout NoLayout
+@inject NavigationManager NavManager
+
+<style>
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: #1E1E1E
+    }
+    .main-message {
+        margin-left: 10%;
+        margin-top: 10%;
+    }
+    .subtitle {
+        margin-left: 10%;
+        margin-top: 2%;
+    }
+    .navigation {
+        margin-left: 10%;
+        margin-top: 1%;
+    }
+</style>
+
+<div class="overlay">
+    <div class="main-message">
+        <MatH1 Style="display: inline-block">@IconText</MatH1>
+        
+        <MatH1 Style="color: whitesmoke; display: inline-block">@FriendlyMessage</MatH1>
+    </div>
+    <div class="subtitle">
+        <MatH4 Style="color: whitesmoke">@ErrorMessage</MatH4>
+    </div>
+    <div class="navigation">
+        <MatThemeProvider Theme="theme">
+            <MatButton Unelevated="true" OnClick="Click">Head to Safety</MatButton>
+        </MatThemeProvider>
+    </div>
+</div>
+
+@code {
+
+    MatTheme theme = new MatTheme()
+    {
+        Primary = MatThemeColors.BlueGrey._400.Value
+    };
+
+    [Parameter]
+    public string ReturnUrl { get; set; } = "/";
+
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    [Parameter]
+    public string IconText { get; set; } = "⚠️";
+
+    [Parameter]
+    public string FriendlyMessage { get; set; } = "Oops! Something went wrong...";
+
+    private void Click()
+    {
+        NavManager.NavigateTo(ReturnUrl);
+    }
+
+}

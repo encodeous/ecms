@@ -1,0 +1,45 @@
+﻿@page "/manage/account/terminate"
+@using ECMS.Security
+@inject Authenticator Authenticator
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavManager
+
+<AuthorizeView>
+    <NotAuthorized>
+        @if (_signedOut)
+        {
+            <MatH3 Style="padding-bottom: 10px">Good Bye.</MatH3>
+            <MatH5>Your account has been terminated.</MatH5>
+        }
+        else
+        {
+            <Error ErrorMessage="You are not authorized to see this page." />
+        }
+    </NotAuthorized>
+    <Authorized>
+        <MatH3>Please confirm your account termination by entering your account password.</MatH3>
+        <MatTextField @bind-Value="_password" Label="Password Confirmation" Required="true" FullWidth="true" Type="password"></MatTextField>
+        <MatH5>@_terminateResult</MatH5>
+        <MatButton Style="display: inline-block" OnClick="() => TerminateAccount(context.User.Identity.Name)">Permanently Delete My Account</MatButton>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    string _password = "";
+    string _terminateResult = "";
+    bool _signedOut = false;
+    public async Task TerminateAccount(string username)
+    {
+        var success = Authenticator.RemoveUser(username, _password);
+        if (success)
+        {
+            _signedOut = true;
+            var provider = (EcmsAuthenticationStateProvider)AuthenticationStateProvider;
+            await provider.SignOut();
+        }
+        else
+        {
+            _terminateResult = "Your password is incorrect.";
+        }
+    }
+}
